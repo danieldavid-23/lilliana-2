@@ -1,0 +1,124 @@
+{% load static %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0 text-primary"><i class="bi bi-speedometer2"></i> Panel de Control</h1>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm bg-success bg-opacity-10">
+            <div class="card-body text-center">
+                <i class="bi bi-box-seam text-success" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0 fw-bold">{{ total_productos }}</h3>
+                <p class="text-muted mb-0">Productos</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm bg-primary bg-opacity-10">
+            <div class="card-body text-center">
+                <i class="bi bi-tags text-primary" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0 fw-bold">{{ total_categorias }}</h3>
+                <p class="text-muted mb-0">Categorías</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm bg-info bg-opacity-10">
+            <div class="card-body text-center">
+                <i class="bi bi-cart-check text-info" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0 fw-bold">{{ total_compras }}</h3>
+                <p class="text-muted mb-0">Compras</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm bg-warning bg-opacity-10">
+            <div class="card-body text-center">
+                <i class="bi bi-cart4 text-warning" style="font-size: 2rem;"></i>
+                <h3 class="mt-2 mb-0 fw-bold">{{ total_ventas }}</h3>
+                <p class="text-muted mb-0">Ventas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Ingresos Totales</h6>
+                <h3 class="text-success fw-bold">${{ total_ingresos|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Gastos Totales</h6>
+                <h3 class="text-danger fw-bold">${{ total_gastos|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Productos Bajo Stock</h6>
+                <h3 class="{% if productos_bajo_stock > 0 %}text-warning{% else %}text-success{% endif %} fw-bold">{{ productos_bajo_stock }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-tag"></i> Categorías más populares</h5>
+            </div>
+            <div class="card-body">
+                {% if categorias %}
+                <table class="table table-sm">
+                    <thead><tr><th>Categoría</th><th class="text-end">Productos</th></tr></thead>
+                    <tbody>
+                        {% for cat in categorias %}
+                        <tr>
+                            <td>{{ cat.nombre }}</td>
+                            <td class="text-end"><span class="badge bg-primary rounded-pill">{{ cat.total }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted text-center mb-0">No hay categorías</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Ventas recientes</h5>
+            </div>
+            <div class="card-body">
+                {% if ventas_recientes %}
+                <table class="table table-sm">
+                    <thead><tr><th>Producto</th><th>Cant.</th><th>Total</th><th>Fecha</th></tr></thead>
+                    <tbody>
+                        {% for v in ventas_recientes %}
+                        <tr>
+                            <td>{{ v.producto.nombre|truncatewords:3 }}</td>
+                            <td>{{ v.cantidad }}</td>
+                            <td>${{ v.total }}</td>
+                            <td><small class="text-muted">{{ v.fecha_venta|date:"d/m/Y" }}</small></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted text-center mb-0">No hay ventas recientes</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>initPageScripts();</script>

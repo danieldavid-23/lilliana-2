@@ -240,7 +240,7 @@ def dashboard_view(request):
     productos_bajo_stock = Producto.objects.filter(stock__lt=10).count()
     categorias = Categoria.objects.annotate(total=Count('productos')).order_by('-total')[:5]
     ventas_recientes = Venta.objects.select_related('producto', 'usuario').order_by('-fecha_venta')[:5]
-    return render(request, 'agricola/dashboard.html', {
+    context = {
         'total_productos': total_productos,
         'total_categorias': total_categorias,
         'total_compras': total_compras,
@@ -250,4 +250,7 @@ def dashboard_view(request):
         'productos_bajo_stock': productos_bajo_stock,
         'categorias': categorias,
         'ventas_recientes': ventas_recientes,
-    })
+    }
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'agricola/dashboard_content.html', context)
+    return render(request, 'agricola/dashboard.html', context)

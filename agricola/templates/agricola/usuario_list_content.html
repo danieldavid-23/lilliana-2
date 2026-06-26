@@ -1,0 +1,92 @@
+{% load static %}
+<div class="alert-container"></div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0 text-primary"><i class="bi bi-people"></i> Usuarios</h1>
+    {% if user.is_superuser %}
+    <a href="{% url 'usuario_create_admin' %}" class="btn btn-primary rounded-pill px-4 shadow-sm no-spa">
+        <i class="bi bi-plus-lg"></i> Crear Usuario
+    </a>
+    {% endif %}
+</div>
+<div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-success">
+            <tr>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Fecha Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td class="fw-semibold">
+                    <i class="bi bi-person-circle"></i> {{ u.username }}
+                    {% if u.is_superuser %}<span class="badge bg-warning text-dark ms-1">Super Admin</span>{% endif %}
+                </td>
+                <td>{{ u.email|default:"-" }}</td>
+                <td>
+                    {% if u.is_superuser %}
+                        <span class="badge bg-warning text-dark">Super Admin</span>
+                    {% else %}
+                        {% for g in u.groups.all %}
+                            <span class="badge bg-info">{{ g.name }}</span>
+                        {% empty %}
+                            <span class="badge bg-secondary">Sin rol</span>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if u.is_active %}
+                        <span class="badge bg-success">Activo</span>
+                    {% else %}
+                        <span class="badge bg-danger">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td><small class="text-muted">{{ u.date_joined|date:"d/m/Y" }}</small></td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        {% if not u.is_superuser %}
+                        <form method="post" action="{% url 'usuario_cambiar_rol' u.pk %}" class="d-inline ajax-form">
+                            {% csrf_token %}
+                            <select name="rol" class="form-select form-select-sm d-inline w-auto">
+                                <option value="">Cambiar rol</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Vendedor">Vendedor</option>
+                                <option value="Comprador">Comprador</option>
+                            </select>
+                        </form>
+                        {% endif %}
+                        {% if user.is_superuser and u.is_active and u != user %}
+                        <a href="{% url 'usuario_toggle_active' u.pk %}" class="btn btn-outline-warning ms-1 no-spa" title="Desactivar">
+                            <i class="bi bi-pause-circle"></i>
+                        </a>
+                        {% elif user.is_superuser and not u.is_active %}
+                        <a href="{% url 'usuario_toggle_active' u.pk %}" class="btn btn-outline-success ms-1 no-spa" title="Activar">
+                            <i class="bi bi-play-circle"></i>
+                        </a>
+                        {% endif %}
+                        {% if user.is_superuser and u != user %}
+                        <a href="{% url 'usuario_delete' u.pk %}" class="btn btn-outline-danger ms-1 no-spa" title="Eliminar">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center py-4 text-muted">
+                    <i class="bi bi-people" style="font-size: 2rem;"></i>
+                    <p class="mt-2">No hay usuarios registrados.</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% include 'agricola/pagination.html' with page_obj=usuarios %}
+<script>initPageScripts();</script>

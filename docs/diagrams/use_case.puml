@@ -1,23 +1,46 @@
 @startuml
-title Diagrama de Casos de Uso - Sistema Agricola
+title Casos de Uso del Sistema Agricola
 skinparam defaultFontSize 14
 skinparam backgroundColor #F8F9FA
 
 left to right direction
 
-actor "Administrador" as admin
-actor "Vendedor" as vendedor
 actor "Comprador" as comprador
+actor "Vendedor" as vendedor
+actor "Administrador" as admin
+actor "Super Administrador" as superadmin
 
 rectangle "Sistema Agricola" {
-  usecase "Gestionar Productos" as UC1
-  usecase "Gestionar Categorias" as UC2
+  usecase "Ver productos" as UC1
+  usecase "Ver categorias" as UC2
   usecase "Gestionar Compras" as UC3
-  usecase "Gestionar Ventas" as UC4
-  usecase "Exportar Datos" as UC5
-  usecase "Administrar Usuarios" as UC6
-  usecase "Autenticarse" as UC7
+  usecase "Gestionar Productos" as UC4
+  usecase "Gestionar Ventas" as UC5
+  usecase "Gestionar Categorias" as UC6
+  usecase "Exportar datos CSV" as UC7
+  usecase "Ver Reportes" as UC8
+  usecase "Gestionar Usuarios" as UC9
+  usecase "Ver Dashboard" as UC10
+  usecase "Configurar Sistema" as UC11
+  usecase "Ver Auditoria" as UC12
+  usecase "Crear Usuarios" as UC13
+  usecase "Eliminar Usuarios" as UC14
+  usecase "Autenticarse" as UC15
 }
+
+comprador --> UC1
+comprador --> UC2
+comprador --> UC3
+comprador --> UC10
+comprador --> UC15
+
+vendedor --> UC1
+vendedor --> UC2
+vendedor --> UC3
+vendedor --> UC4
+vendedor --> UC5
+vendedor --> UC10
+vendedor --> UC15
 
 admin --> UC1
 admin --> UC2
@@ -26,12 +49,25 @@ admin --> UC4
 admin --> UC5
 admin --> UC6
 admin --> UC7
+admin --> UC8
+admin --> UC9
+admin --> UC10
+admin --> UC15
 
-vendedor --> UC1
-vendedor --> UC4
-vendedor --> UC7
-
-comprador --> UC3
-comprador --> UC7
+superadmin --> UC1
+superadmin --> UC2
+superadmin --> UC3
+superadmin --> UC4
+superadmin --> UC5
+superadmin --> UC6
+superadmin --> UC7
+superadmin --> UC8
+superadmin --> UC9
+superadmin --> UC10
+superadmin --> UC11
+superadmin --> UC12
+superadmin --> UC13
+superadmin --> UC14
+superadmin --> UC15
 
 @enduml

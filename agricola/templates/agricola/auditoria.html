@@ -1,0 +1,88 @@
+{% extends 'agricola/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0 text-primary"><i class="bi bi-clipboard-data"></i> Registro de Auditoria</h1>
+</div>
+<div class="row g-4 mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-shield"></i> Usuarios por Rol</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for rol in usuarios_por_rol %}
+                    <div class="col-md-4 mb-2">
+                        <div class="d-flex justify-content-between border-bottom pb-2">
+                            <span class="fw-semibold">{{ rol.name }}</span>
+                            <span class="badge bg-primary rounded-pill">{{ rol.total }}</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No hay roles definidos</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-person-plus"></i> Usuarios Recientes</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for u in usuarios_recientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ u.username }}</span>
+                        <small class="text-muted">{{ u.date_joined|date:"d/m/Y" }}</small>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-muted">No hay usuarios</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-cart-check"></i> Compras Recientes</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for c in compras_recientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ c.producto.nombre|truncatewords:3 }}</span>
+                        <small class="text-muted">${{ c.total }} - {{ c.usuario.username }}</small>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-muted">No hay compras</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-cart4"></i> Ventas Recientes</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for v in ventas_recientes %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ v.producto.nombre|truncatewords:3 }}</span>
+                        <small class="text-muted">${{ v.total }} - {{ v.usuario.username }}</small>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-muted">No hay ventas</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

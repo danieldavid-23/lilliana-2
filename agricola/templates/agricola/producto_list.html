@@ -11,9 +11,11 @@
 {% endif %}
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-primary"><i class="bi bi-box-seam"></i> Productos</h1>
+    {% if user.is_superuser or user.groups.filter.name == 'Admin' or user.groups.filter.name == 'Vendedor' %}
     <a href="{% url 'producto_create' %}" class="btn btn-primary rounded-pill px-4 shadow-sm">
         <i class="bi bi-plus-lg"></i> Agregar Producto
     </a>
+    {% endif %}
 </div>
 <div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
@@ -25,7 +27,7 @@
                 <th>Stock</th>
                 <th>Categoría</th>
                 <th>Fecha</th>
-                <th>Acciones</th>
+                {% if user.is_superuser or user.groups.filter.name == 'Admin' or user.groups.filter.name == 'Vendedor' %}<th>Acciones</th>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -45,12 +47,14 @@
                 </td>
                 <td>{{ producto.categoria.nombre }}</td>
                 <td><small class="text-muted">{{ producto.created_at|date:"d/m/Y" }}</small></td>
+                {% if user.is_superuser or user.groups.filter.name == 'Admin' or user.groups.filter.name == 'Vendedor' %}
                 <td>
                     <div class="btn-group btn-group-sm">
                         <a href="{% url 'producto_update' producto.pk %}" class="btn btn-outline-warning" title="Editar"><i class="bi bi-pencil"></i></a>
                         <a href="{% url 'producto_delete' producto.pk %}" class="btn btn-outline-danger" title="Eliminar"><i class="bi bi-trash"></i></a>
                     </div>
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>

@@ -1,0 +1,86 @@
+{% extends 'agricola/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0 text-primary"><i class="bi bi-graph-up"></i> Reportes Financieros</h1>
+</div>
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm bg-success bg-opacity-10">
+            <div class="card-body text-center">
+                <i class="bi bi-arrow-up-circle text-success" style="font-size: 2rem;"></i>
+                <h6 class="text-muted mt-2">Ingresos Totales</h6>
+                <h3 class="text-success fw-bold">${{ total_ingresos|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm bg-danger bg-opacity-10">
+            <div class="card-body text-center">
+                <i class="bi bi-arrow-down-circle text-danger" style="font-size: 2rem;"></i>
+                <h6 class="text-muted mt-2">Gastos Totales</h6>
+                <h3 class="text-danger fw-bold">${{ total_gastos|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm {% if margen >= 0 %}bg-success{% else %}bg-danger{% endif %} bg-opacity-10">
+            <div class="card-body text-center">
+                <i class="bi bi-{% if margen >= 0 %}emoji-smile{% else %}emoji-frown{% endif %} {% if margen >= 0 %}text-success{% else %}text-danger{% endif %}" style="font-size: 2rem;"></i>
+                <h6 class="text-muted mt-2">Margen de Ganancia</h6>
+                <h3 class="{% if margen >= 0 %}text-success{% else %}text-danger{% endif %} fw-bold">${{ margen|floatformat:2 }}</h3>
+                <small class="{% if margen >= 0 %}text-success{% else %}text-danger{% endif %}">{{ margen_porcentaje|floatformat:1 }}%</small>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-box"></i> Productos mas vendidos</h5>
+            </div>
+            <div class="card-body">
+                {% if productos_mas_vendidos %}
+                <table class="table table-sm">
+                    <thead><tr><th>Producto</th><th class="text-end">Unidades vendidas</th></tr></thead>
+                    <tbody>
+                        {% for p in productos_mas_vendidos %}
+                        <tr>
+                            <td>{{ p.producto__nombre }}</td>
+                            <td class="text-end"><span class="badge bg-primary rounded-pill">{{ p.total_vendido }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted text-center mb-0">No hay ventas registradas</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0"><i class="bi bi-tag"></i> Categorias con mas gastos</h5>
+            </div>
+            <div class="card-body">
+                {% if categorias_mas_compradas %}
+                <table class="table table-sm">
+                    <thead><tr><th>Categoria</th><th class="text-end">Total gastado</th></tr></thead>
+                    <tbody>
+                        {% for c in categorias_mas_compradas %}
+                        <tr>
+                            <td>{{ c.producto__categoria__nombre }}</td>
+                            <td class="text-end">${{ c.total_gastado|floatformat:2 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-muted text-center mb-0">No hay compras registradas</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

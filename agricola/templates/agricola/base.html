@@ -26,22 +26,42 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'producto_list' %}"><i class="bi bi-box-seam"></i> Productos</a>
                     </li>
+                    {% if user.is_superuser or user.groups.filter.name == 'Admin' or user.groups.filter.name == 'Vendedor' %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'categoria_list' %}"><i class="bi bi-tags"></i> Categorías</a>
+                        <a class="nav-link" href="{% url 'categoria_list' %}"><i class="bi bi-tags"></i> Categorias</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'compra_list' %}"><i class="bi bi-cart-check"></i> Compras</a>
                     </li>
+                    {% if user.is_superuser or user.groups.filter.name == 'Admin' or user.groups.filter.name == 'Vendedor' %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'venta_list' %}"><i class="bi bi-cart4"></i> Ventas</a>
                     </li>
+                    {% endif %}
+                    {% if user.is_superuser or user.groups.filter.name == 'Admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'usuario_list' %}"><i class="bi bi-people"></i> Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'reporte' %}"><i class="bi bi-graph-up"></i> Reportes</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_superuser %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'configuracion' %}"><i class="bi bi-gear"></i> Configuracion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'auditoria' %}"><i class="bi bi-clipboard-data"></i> Auditoria</a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle user-info" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> {{ user.username }}
-                            {% if user.is_superuser %}<span class="badge bg-warning text-dark ms-1">Admin</span>{% endif %}
+                            {% if user.is_superuser %}<span class="badge bg-warning text-dark ms-1">Super Admin</span>{% elif user.groups.filter.name == 'Admin' %}<span class="badge bg-info ms-1">Admin</span>{% elif user.groups.filter.name == 'Vendedor' %}<span class="badge bg-success ms-1">Vendedor</span>{% else %}<span class="badge bg-secondary ms-1">Comprador</span>{% endif %}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><span class="dropdown-item-text text-muted small">{{ user.email|default:"Sin correo" }}</span></li>

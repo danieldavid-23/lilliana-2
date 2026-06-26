@@ -4,52 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema Agrícola{% endblock %}</title>
-    <!-- Bootstrap local -->
-    <link href="{% load static %}{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-icons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-agri">
         <div class="container">
-            <a class="navbar-brand" href="#">Sistema Agrícola</a>
+            <a class="navbar-brand" href="{% url 'producto_list' %}">
+                <i class="bi bi-tree-fill"></i> Sistema Agrícola
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'producto_list' %}"><i class="bi bi-box-seam"></i> Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'categoria_list' %}"><i class="bi bi-tags"></i> Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'compra_list' %}"><i class="bi bi-cart-check"></i> Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'venta_list' %}"><i class="bi bi-cart4"></i> Ventas</a>
+                    </li>
+                </ul>
                 <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-info" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ user.username }}
+                            {% if user.is_superuser %}<span class="badge bg-warning text-dark ms-1">Admin</span>{% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><span class="dropdown-item-text text-muted small">{{ user.email|default:"Sin correo" }}</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="loadContent('{% url 'producto_list' %}')">Productos</a>
+                        <a class="nav-link" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="loadContent('{% url 'categoria_list' %}')">Categorías</a>
+                        <a class="nav-link" href="{% url 'registro' %}"><i class="bi bi-person-plus"></i> Registrarse</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="loadContent('{% url 'compra_list' %}')">Compras</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="loadContent('{% url 'venta_list' %}')">Ventas</a>
-                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="content" class="container mt-4">
+    <div id="content" class="container mt-4 fade-in">
         {% block content %}
         {% endblock %}
     </div>
 
-    <!-- Scripts locales -->
-    <script src="{% load static %}{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% load static %}{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    
-    <script>
-        function loadContent(url) {
-            $.get(url, function(data) {
-                $('#content').html(data);
-            }).fail(function() {
-                alert('Error al cargar el contenido');
-            });
-        }
-    </script>
+    <footer class="mt-5 py-3 text-center">
+        <div class="container">
+            <small>&copy; {% now "Y" %} Sistema Agrícola - Todos los derechos reservados</small>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

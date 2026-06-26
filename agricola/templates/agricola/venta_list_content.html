@@ -1,0 +1,44 @@
+{% load static %}
+<div class="alert-container"></div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0 text-primary">
+        <i class="bi bi-cart4"></i> Ventas
+    </h1>
+    <a href="{% url 'venta_create' %}" class="btn btn-primary rounded-pill px-4 shadow-sm no-spa">
+        <i class="bi bi-plus-lg"></i> Registrar Venta
+    </a>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-success">
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>P. Unitario</th>
+                <th>Total</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in ventas %}
+            <tr>
+                <td class="fw-semibold">{{ venta.producto.nombre }}</td>
+                <td>{{ venta.cantidad }}</td>
+                <td><span class="badge bg-info bg-opacity-10 text-info px-3 py-2">${{ venta.precio_unitario }}</span></td>
+                <td><span class="badge bg-success bg-opacity-10 text-success px-3 py-2">${{ venta.total }}</span></td>
+                <td>{{ venta.usuario.username }}</td>
+                <td><small class="text-muted">{{ venta.fecha_venta|date:"d/m/Y H:i" }}</small></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center py-4 text-muted">
+                    <i class="bi bi-cart4" style="font-size: 2rem;"></i>
+                    <p class="mt-2">No hay ventas registradas.</p>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>initPageScripts();</script>

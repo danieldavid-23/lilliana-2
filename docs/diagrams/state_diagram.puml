@@ -1,0 +1,30 @@
+@startuml
+title Diagrama de Estados - Ciclo de Vida del Producto
+
+[*] --> Borrador : Crear producto
+
+Borrador --> Activo : Publicar (stock > 0)
+Borrador --> [*] : Eliminar
+
+Activo --> BajoStock : Venta reduce stock < umbral
+Activo --> Agotado : Venta reduce stock = 0
+Activo --> [*] : Eliminar
+
+BajoStock --> Activo : Compra aumenta stock
+BajoStock --> Agotado : Venta reduce stock = 0
+BajoStock --> [*] : Eliminar
+
+Agotado --> Activo : Compra aumenta stock
+Agotado --> [*] : Eliminar
+
+state Borrador {
+  [*] --> Editando : Crear instancia
+  Editando --> Guardado : Formulario válido
+}
+
+state Activo {
+  [*] --> Disponible : Stock > 10
+  Disponible --> EnDemanda : Stock entre 1 y 10
+}
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+title Diagrama de Secuencia - Registrar Compra
+
+actor "Usuario" as user
+participant "Navegador" as browser
+participant "Vista" as view
+participant "Formulario" as form
+participant "Modelo" as model
+database "BD" as db
+
+user -> browser: Click "Registrar Compra"
+browser -> view: GET /agricola/compras/create/
+view -> form: Instancia CompraForm()
+form --> view: Formulario vacío
+view --> browser: HTML del formulario
+browser --> user: Muestra formulario
+
+user -> browser: Completa datos y envía
+browser -> view: POST /agricola/compras/create/ + datos
+view -> view: Valida permisos (login_required)
+view -> form: Valida datos (is_valid())
+form --> view: Datos válidos
+view -> model: Crea instancia Compra
+model -> db: INSERT compra
+model -> model: Calcula total
+view -> model: Actualiza stock del producto
+model -> db: UPDATE producto SET stock
+view --> browser: Redirección + mensaje éxito
+browser --> user: Muestra lista de compras
+
+@enduml

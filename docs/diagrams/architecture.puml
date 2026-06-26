@@ -1,0 +1,32 @@
+@startuml
+title Arquitectura del Sistema - Capas
+
+package "Capa Presentación" {
+  [Templates HTML] as templates
+  [CSS / Bootstrap] as css
+  [JavaScript / SPA] as js
+}
+
+package "Capa Lógica" {
+  [Vistas (Views)] as views
+  [Formularios (Forms)] as forms
+  [Decoradores] as decorators
+}
+
+package "Capa Datos" {
+  [Modelos (Models)] as models
+  [Migrations] as migrations
+}
+
+database "SQLite" as db
+
+templates --> views : Renderiza
+js --> views : AJAX requests
+views --> forms : Valida datos
+views --> decorators : Control acceso
+views --> models : CRUD
+forms --> models : Persiste
+models --> db : SQL
+db --> models : Resultados
+
+@enduml

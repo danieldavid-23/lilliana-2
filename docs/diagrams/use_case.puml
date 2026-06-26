@@ -1,0 +1,35 @@
+@startuml
+title Diagrama de Casos de Uso - Sistema Agrícola
+
+left to right direction
+
+actor "Administrador" as admin
+actor "Vendedor" as vendedor
+actor "Comprador" as comprador
+
+rectangle "Sistema Agrícola" {
+  usecase "Gestionar Productos" as UC1
+  usecase "Gestionar Categorías" as UC2
+  usecase "Gestionar Compras" as UC3
+  usecase "Gestionar Ventas" as UC4
+  usecase "Exportar Datos" as UC5
+  usecase "Administrar Usuarios" as UC6
+  usecase "Autenticarse" as UC7
+}
+
+admin --> UC1
+admin --> UC2
+admin --> UC3
+admin --> UC4
+admin --> UC5
+admin --> UC6
+admin --> UC7
+
+vendedor --> UC1
+vendedor --> UC4
+vendedor --> UC7
+
+comprador --> UC3
+comprador --> UC7
+
+@enduml

@@ -1,32 +1,34 @@
 @startuml
-title Arquitectura del Sistema - Capas
+title Arquitectura del Sistema por Capas
+skinparam defaultFontSize 14
+skinparam backgroundColor #F8F9FA
 
-package "Capa Presentación" {
-  [Templates HTML] as templates
-  [CSS / Bootstrap] as css
+package "Capa de Presentacion" as presentacion {
+  [Plantillas HTML] as templates
+  [CSS / Bootstrap Local] as css
   [JavaScript / SPA] as js
 }
 
-package "Capa Lógica" {
+package "Capa de Logica" as logica {
   [Vistas (Views)] as views
   [Formularios (Forms)] as forms
-  [Decoradores] as decorators
+  [Decoradores de Roles] as decorators
 }
 
-package "Capa Datos" {
+package "Capa de Datos" as datos {
   [Modelos (Models)] as models
-  [Migrations] as migrations
+  [Migraciones] as migrations
 }
 
-database "SQLite" as db
+database "Base de Datos" as db
 
-templates --> views : Renderiza
-js --> views : AJAX requests
-views --> forms : Valida datos
-views --> decorators : Control acceso
-views --> models : CRUD
-forms --> models : Persiste
-models --> db : SQL
-db --> models : Resultados
+templates --> views : Renderiza paginas
+js --> views : Peticiones AJAX
+views --> forms : Valida datos ingresados
+views --> decorators : Controla acceso por roles
+views --> models : Operaciones CRUD
+forms --> models : Guarda datos en modelos
+models --> db : Ejecuta consultas SQL
+db --> models : Retorna resultados
 
 @enduml

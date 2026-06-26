@@ -1,13 +1,14 @@
 @startuml
-title Diagrama de Clases - Sistema Agrícola
+title Diagrama de Clases - Sistema Agricola
+skinparam defaultFontSize 13
+skinparam backgroundColor #F8F9FA
 
 class Categoria {
   - id: int
   - nombre: string
   - descripcion: text
-  - created_at: datetime
-  - updated_at: datetime
-  + __str__(): string
+  - fecha_creacion: datetime
+  - fecha_actualizacion: datetime
 }
 
 class Producto {
@@ -17,9 +18,8 @@ class Producto {
   - precio: decimal
   - stock: int
   - imagen: image
-  - created_at: datetime
-  - updated_at: datetime
-  + __str__(): string
+  - fecha_creacion: datetime
+  - fecha_actualizacion: datetime
 }
 
 class Compra {
@@ -28,7 +28,6 @@ class Compra {
   - precio_unitario: decimal
   - total: decimal
   - fecha_compra: datetime
-  + save(): void
 }
 
 class Venta {
@@ -37,28 +36,25 @@ class Venta {
   - precio_unitario: decimal
   - total: decimal
   - fecha_venta: datetime
-  + save(): void
 }
 
-class User {
+class Usuario {
   - id: int
-  - username: string
-  - email: string
-  - password: string
-  + groups(): ManyToMany
+  - nombre_usuario: string
+  - correo: string
+  - contrasena: string
 }
 
-class Group {
+class Grupo {
   - id: int
-  - name: string
-  + permissions(): ManyToMany
+  - nombre: string
 }
 
 Categoria "1" -- "0..*" Producto : contiene
-Producto "1" -- "0..*" Compra : incluido_en
-Producto "1" -- "0..*" Venta : vendido_en
-User "1" -- "0..*" Compra : realiza
-User "1" -- "0..*" Venta : registra
-User "*" -- "*" Group : pertenece_a
+Producto "1" -- "0..*" Compra : incluido en
+Producto "1" -- "0..*" Venta : vendido en
+Usuario "1" -- "0..*" Compra : realiza
+Usuario "1" -- "0..*" Venta : registra
+Usuario "*" -- "*" Grupo : pertenece a
 
 @enduml

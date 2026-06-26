@@ -1,115 +1,36 @@
 @startuml
-skinparam packageStyle rectangle
-skinparam backgroundColor #F8F9FA
-skinparam defaultFontName Segoe UI
-skinparam defaultFontSize 12
+title Patrones de Diseno del Sistema Agricola
 
-title <size:20><b>Patrones de Diseño Implementados</b></size>\n<size:14>Sistema Agrícola - 12 Patrones</size>
-
-package "<< Capa de Presentación >>" as presentation #D8F3DC {
-  [<size:14><b>MVC</b></size>\n(Modelo-Vista-Controlador)] as mvc
-  [<size:14><b>Adapter</b></size>\n(Adaptador)] as adapter
-  [<size:14><b>Template Method</b></size>\n(Método Plantilla)] as template
+package "Capa de Presentacion" as presentation {
+  [MVC] as mvc
+  [Adapter] as adapter
+  [Template Method] as template
 }
 
-package "<< Capa de Lógica >>" as logic #FAEDCD {
-  [<size:14><b>Factory</b></size>\n(Fábrica)] as factory
-  [<size:14><b>Strategy</b></size>\n(Estrategia)] as strategy
-  [<size:14><b>Decorator</b></size>\n(Decorador)] as decorator
-  [<size:14><b>Observer</b></size>\n(Observador)] as observer
-  [<size:14><b>Chain of Resp.</b></size>\n(Cadena de Responsabilidad)] as chain
+package "Capa de Logica" as logic {
+  [Factory] as factory
+  [Strategy] as strategy
+  [Decorator] as decorator
+  [Observer] as observer
+  [Chain of Resp.] as chain
 }
 
-package "<< Capa de Datos >>" as data #E2F0D9 {
-  [<size:14><b>Singleton</b></size>\n(Instancia Única)] as singleton
-  [<size:14><b>Proxy</b></size>\n(Proxy)] as proxy
-  [<size:14><b>Repository</b></size>\n(Repositorio)] as repository
-  [<size:14><b>Command</b></size>\n(Comando)] as command
+package "Capa de Datos" as data {
+  [Singleton] as singleton
+  [Proxy] as proxy
+  [Repository] as repository
+  [Command] as command
 }
 
-' Relaciones entre capas
-mvc --> adapter : "Renderiza datos en\n templates HTML"
-adapter --> factory : "Usa formularios\npara crear modelos"
-factory --> strategy : "Valida campos\ncon regex"
-decorator --> factory : "Protege vistas\ncon roles"
-observer --> mvc : "Notifica resultados\nal usuario"
-chain --> decorator : "Envuelve peticiones\nen middleware"
-template --> adapter : "Define flujo de\nprocesamiento"
-repository --> proxy : "Evalúa consultas\nde forma perezosa"
-singleton --> repository : "Mantiene una sola\nconexión a BD"
-command --> repository : "Opera desde línea\nde comandos"
-
-' Notas con ubicación real
-note right of mvc
-  <b>Ubicación:</b>
-  models.py, views.py,
-  templates/*.html
-end note
-
-note right of adapter
-  <b>Ubicación:</b>
-  views.py
-  (Datos → HTML/JSON)
-end note
-
-note right of template
-  <b>Ubicación:</b>
-  Vistas genéricas Django
-  (ListView, FormView)
-end note
-
-note right of factory
-  <b>Ubicación:</b>
-  forms.py
-  (ProductoForm, etc.)
-end note
-
-note right of strategy
-  <b>Ubicación:</b>
-  forms.py líneas 8-16
-  (RegexValidator)
-end note
-
-note right of decorator
-  <b>Ubicación:</b>
-  decorators.py, views.py
-  @login_required, @admin_required
-end note
-
-note right of observer
-  <b>Ubicación:</b>
-  views.py
-  messages.success()
-end note
-
-note right of chain
-  <b>Ubicación:</b>
-  settings.py
-  MIDDLEWARE list
-end note
-
-note right of singleton
-  <b>Ubicación:</b>
-  settings.py
-  DATABASES config
-end note
-
-note right of proxy
-  <b>Ubicación:</b>
-  models.py
-  QuerySets (evaluación lazy)
-end note
-
-note right of repository
-  <b>Ubicación:</b>
-  Django ORM
-  Producto.objects.all()
-end note
-
-note right of command
-  <b>Ubicación:</b>
-  manage.py,
-  management/commands/
-end note
+mvc --> adapter : Renderiza datos en HTML
+adapter --> factory : Usa formularios
+factory --> strategy : Valida con regex
+decorator --> factory : Protege vistas
+observer --> mvc : Notifica al usuario
+chain --> decorator : Middleware
+template --> adapter : Flujo de procesamiento
+repository --> proxy : Consultas perezosas
+singleton --> repository : Conexion unica a BD
+command --> repository : Linea de comandos
 
 @enduml

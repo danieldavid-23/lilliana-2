@@ -1,0 +1,52 @@
+{% extends 'agricola/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Lista de Compras</h1>
+    <a href="{% url 'compra_create' %}" class="btn btn-primary">Registrar Compra</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Total</th>
+                <th>Usuario</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for compra in compras %}
+            <tr>
+                <td>{{ compra.producto.nombre }}</td>
+                <td>{{ compra.cantidad }}</td>
+                <td>${{ compra.precio_unitario }}</td>
+                <td>${{ compra.total }}</td>
+                <td>{{ compra.usuario.username }}</td>
+                <td>{{ compra.fecha_compra|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No hay compras registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

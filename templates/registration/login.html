@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Sistema Agrícola</title>
+    <link href="{% load static %}{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Iniciar Sesión</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label">Usuario:</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="text-danger">{{ form.username.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.password.id_for_label }}" class="form-label">Contraseña:</label>
+                                {{ form.password }}
+                                {% if form.password.errors %}
+                                    <div class="text-danger">{{ form.password.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% load static %}{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% load static %}{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

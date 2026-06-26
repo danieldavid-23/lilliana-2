@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sistema Agrícola{% endblock %}</title>
+    <!-- Bootstrap local -->
+    <link href="{% load static %}{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">Sistema Agrícola</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadContent('{% url 'producto_list' %}')">Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadContent('{% url 'categoria_list' %}')">Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadContent('{% url 'compra_list' %}')">Compras</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="loadContent('{% url 'venta_list' %}')">Ventas</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="content" class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Scripts locales -->
+    <script src="{% load static %}{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% load static %}{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    
+    <script>
+        function loadContent(url) {
+            $.get(url, function(data) {
+                $('#content').html(data);
+            }).fail(function() {
+                alert('Error al cargar el contenido');
+            });
+        }
+    </script>
+</body>
+</html>

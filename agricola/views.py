@@ -7,6 +7,7 @@ from django.utils.html import escape
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.models import User, Group
+from django.core.paginator import Paginator
 from .models import Producto, Categoria, Compra, Venta
 from .forms import ProductoForm, CategoriaForm, CompraForm, VentaForm, RegistroUsuarioForm
 from .decorators import admin_required, vendedor_required, comprador_required
@@ -30,7 +31,10 @@ def registro_view(request):
 
 @login_required
 def producto_list(request):
-    productos = Producto.objects.all()
+    productos_list = Producto.objects.all().order_by('-created_at')
+    paginator = Paginator(productos_list, 10)
+    page = request.GET.get('page', 1)
+    productos = paginator.get_page(page)
     categorias = Categoria.objects.all()
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'agricola/producto_list_content.html', {
@@ -94,9 +98,11 @@ def producto_delete(request, pk):
 
 @login_required
 def categoria_list(request):
-    categorias = Categoria.objects.all()
     from django.db.models import Count
-    categorias = categorias.annotate(total_productos=Count('productos'))
+    categorias_list = Categoria.objects.annotate(total_productos=Count('productos')).order_by('-created_at')
+    paginator = Paginator(categorias_list, 12)
+    page = request.GET.get('page', 1)
+    categorias = paginator.get_page(page)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'agricola/categoria_list_content.html', {'categorias': categorias})
     return render(request, 'agricola/categoria_list.html', {'categorias': categorias})
@@ -153,7 +159,10 @@ def categoria_delete(request, pk):
 
 @login_required
 def compra_list(request):
-    compras = Compra.objects.all()
+    compras_list = Compra.objects.all().order_by('-fecha_compra')
+    paginator = Paginator(compras_list, 15)
+    page = request.GET.get('page', 1)
+    compras = paginator.get_page(page)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'agricola/compra_list_content.html', {'compras': compras})
     return render(request, 'agricola/compra_list.html', {'compras': compras})
@@ -178,7 +187,10 @@ def compra_create(request):
 
 @vendedor_required
 def venta_list(request):
-    ventas = Venta.objects.all()
+    ventas_list = Venta.objects.all().order_by('-fecha_venta')
+    paginator = Paginator(ventas_list, 15)
+    page = request.GET.get('page', 1)
+    ventas = paginator.get_page(page)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return render(request, 'agricola/venta_list_content.html', {'ventas': ventas})
     return render(request, 'agricola/venta_list.html', {'ventas': ventas})

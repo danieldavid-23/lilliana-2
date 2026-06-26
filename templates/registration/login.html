@@ -4,52 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - Sistema Agrícola</title>
-    <link href="{% load static %}{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-icons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
 </head>
-<body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Iniciar Sesión</h3>
+<body class="bg-agriculture">
+    <div class="container">
+        <div class="row justify-content-center min-vh-100 align-items-center">
+            <div class="col-md-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-tree-fill text-white" style="font-size: 3rem;"></i>
+                    <h2 class="text-white mt-2">Sistema Agrícola</h2>
+                </div>
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-header bg-white text-center rounded-top-4 py-3">
+                        <h3 class="mb-0 text-primary"><i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-4">
                         {% if form.non_field_errors %}
                             <div class="alert alert-danger">
-                                {% for error in form.non_field_errors %}
-                                    {{ error }}
-                                {% endfor %}
+                                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
-                        
                         <form method="post">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <label for="{{ form.username.id_for_label }}" class="form-label">Usuario:</label>
-                                {{ form.username }}
-                                {% if form.username.errors %}
-                                    <div class="text-danger">{{ form.username.errors }}</div>
-                                {% endif %}
+                                <label class="form-label fw-semibold"><i class="bi bi-person"></i> Usuario</label>
+                                <input type="text" name="username" class="form-control" placeholder="Nombre de usuario" required>
                             </div>
-                            
                             <div class="mb-3">
-                                <label for="{{ form.password.id_for_label }}" class="form-label">Contraseña:</label>
-                                {{ form.password }}
-                                {% if form.password.errors %}
-                                    <div class="text-danger">{{ form.password.errors }}</div>
-                                {% endif %}
+                                <label class="form-label fw-semibold"><i class="bi bi-lock"></i> Contraseña</label>
+                                <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
                             </div>
-                            
-                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                            <button type="submit" class="btn btn-primary w-100 py-2">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                            </button>
                         </form>
+                        <div class="text-center mt-3">
+                            <p class="mb-0">¿No tienes cuenta? <a href="{% url 'registro' %}" class="text-primary fw-bold">Regístrate aquí</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <script src="{% load static %}{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% load static %}{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema Agrícola{% endblock %}</title>
-    {% load static %}
+    {% load static role_tags %}
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-icons.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/custom.css' %}" rel="stylesheet">
@@ -26,7 +26,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'producto_list' %}"><i class="bi bi-box-seam"></i> Productos</a>
                     </li>
-                    {% if user.is_superuser or user.groups.filter.name == 'Admin' or user.groups.filter.name == 'Vendedor' %}
+                    {% if user.is_superuser or user|has_group:"Admin" or user|has_group:"Vendedor" %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'categoria_list' %}"><i class="bi bi-tags"></i> Categorias</a>
                     </li>
@@ -34,12 +34,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'compra_list' %}"><i class="bi bi-cart-check"></i> Compras</a>
                     </li>
-                    {% if user.is_superuser or user.groups.filter.name == 'Admin' or user.groups.filter.name == 'Vendedor' %}
+                    {% if user.is_superuser or user|has_group:"Admin" or user|has_group:"Vendedor" %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'venta_list' %}"><i class="bi bi-cart4"></i> Ventas</a>
                     </li>
                     {% endif %}
-                    {% if user.is_superuser or user.groups.filter.name == 'Admin' %}
+                    {% if user.is_superuser or user|has_group:"Admin" %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'usuario_list' %}"><i class="bi bi-people"></i> Usuarios</a>
                     </li>
@@ -61,7 +61,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle user-info" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> {{ user.username }}
-                            {% if user.is_superuser %}<span class="badge bg-warning text-dark ms-1">Super Admin</span>{% elif user.groups.filter.name == 'Admin' %}<span class="badge bg-info ms-1">Admin</span>{% elif user.groups.filter.name == 'Vendedor' %}<span class="badge bg-success ms-1">Vendedor</span>{% else %}<span class="badge bg-secondary ms-1">Comprador</span>{% endif %}
+                            {% if user.is_superuser %}<span class="badge bg-warning text-dark ms-1">Super Admin</span>{% elif user|has_group:"Admin" %}<span class="badge bg-info ms-1">Admin</span>{% elif user|has_group:"Vendedor" %}<span class="badge bg-success ms-1">Vendedor</span>{% else %}<span class="badge bg-secondary ms-1">Comprador</span>{% endif %}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><span class="dropdown-item-text text-muted small">{{ user.email|default:"Sin correo" }}</span></li>

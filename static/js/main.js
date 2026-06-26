@@ -94,11 +94,16 @@ function initPageScripts() {
     $('[data-bs-toggle="tooltip"]').each(function() {
         new bootstrap.Tooltip(this);
     });
+    $('[data-bs-toggle="dropdown"]').each(function() {
+        if (typeof bootstrap !== 'undefined' && !this._bs_dropdown) {
+            this._bs_dropdown = new bootstrap.Dropdown(this);
+        }
+    });
 }
 
 $(document).ready(function() {
     initPageScripts();
-    $(document).on('click', 'a.nav-link, a:not([data-no-spa])', function(e) {
+    $(document).on('click', 'a.nav-link:not([data-bs-toggle]):not([data-no-spa]), a:not([data-bs-toggle]):not([data-no-spa])', function(e) {
         const href = $(this).attr('href');
         if (href && href.startsWith('/') && !href.startsWith('//') && !$(this).attr('target') && !$(this).hasClass('no-spa')) {
             e.preventDefault();

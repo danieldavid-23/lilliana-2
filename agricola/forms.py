@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 from .models import Producto, Categoria, Compra, Venta
 import re
 
@@ -89,3 +90,40 @@ class VentaForm(forms.ModelForm):
             'cantidad': forms.NumberInput(attrs={'class': 'form-control', 'min': 1}),
             'precio_unitario': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
         }
+
+class RegistroUsuarioForm(forms.ModelForm):
+    username = forms.CharField(
+        max_length=150,
+        validators=[RegexValidator(regex=r'^[a-zA-Z0-9_]{4,}$', message='Usuario: mínimo 4 caracteres, solo letras, números y _')],
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de usuario'})
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'correo@ejemplo.com'})
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        validators=[RegexValidator(regex=r'^(?=.*[A-Z])(?=.*\d).{8,}$', message='Mínimo 8 caracteres, 1 mayúscula, 1 número')],
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Contraseña segura'})
+    )
+    password2 = forms.CharField(
+        label='Confirmar Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Repite la contraseña'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+    def clean_password2(self):
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
+        if password and password2 and password != password2:
+            raise forms.ValidationError('Las contraseñas no coinciden')
+        return password2
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+        return user

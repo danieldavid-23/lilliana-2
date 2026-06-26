@@ -227,3 +227,27 @@ def categoria_export_csv(request):
     for cat in Categoria.objects.all():
         writer.writerow([cat.id, cat.nombre, cat.descripcion, cat.created_at])
     return response
+
+@login_required
+def dashboard_view(request):
+    from django.db.models import Count, Sum
+    total_productos = Producto.objects.count()
+    total_categorias = Categoria.objects.count()
+    total_compras = Compra.objects.count()
+    total_ventas = Venta.objects.count()
+    total_ingresos = Venta.objects.aggregate(Sum('total'))['total__sum'] or 0
+    total_gastos = Compra.objects.aggregate(Sum('total'))['total__sum'] or 0
+    productos_bajo_stock = Producto.objects.filter(stock__lt=10).count()
+    categorias = Categoria.objects.annotate(total=Count('productos')).order_by('-total')[:5]
+    ventas_recientes = Venta.objects.select_related('producto', 'usuario').order_by('-fecha_venta')[:5]
+    return render(request, 'agricola/dashboard.html', {
+        'total_productos': total_productos,
+        'total_categorias': total_categorias,
+        'total_compras': total_compras,
+        'total_ventas': total_ventas,
+        'total_ingresos': total_ingresos,
+        'total_gastos': total_gastos,
+        'productos_bajo_stock': productos_bajo_stock,
+        'categorias': categorias,
+        'ventas_recientes': ventas_recientes,
+    })

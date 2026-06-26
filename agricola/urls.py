@@ -16,4 +16,5 @@ urlpatterns = [
     path('ventas/', views.venta_list, name='venta_list'),
     path('ventas/create/', views.venta_create, name='venta_create'),
     path('categorias/exportar/', views.categoria_export_csv, name='categoria_export_csv'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
 ]

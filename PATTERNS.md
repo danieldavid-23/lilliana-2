@@ -4,6 +4,14 @@
 
 ---
 
+## Diagrama General de Patrones
+
+![Diagrama de Patrones de Diseño](docs/diagrams/pattern_diagram.png)
+
+*Diagrama que muestra los 12 patrones organizados por capas (Presentación, Lógica, Datos) y sus relaciones.*
+
+---
+
 ## 1. Modelo-Vista-Controlador (MVC)
 
 **Tipo:** Arquitectónico  

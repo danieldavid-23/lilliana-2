@@ -66,6 +66,8 @@ Sistema web desarrollado en Django para la gestión integral de productos agríc
 
 ## 🎨 Patrones de Diseño (12 Implementados)
 
+![Diagrama de Patrones](docs/diagrams/pattern_diagram.png)
+
 Ver documentación completa en [`PATTERNS.md`](PATTERNS.md).
 
 | # | Patrón | Ubicación | Propósito |
